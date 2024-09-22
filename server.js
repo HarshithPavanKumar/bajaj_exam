@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,17 +13,17 @@ const user = {
     roll_number: 'AP21110010654'
 };
 
-// POST Route
+// POST Route to handle data filtering
 app.post('/bfhl', (req, res) => {
     let { data, file_b64 } = req.body;
 
-    // Process numbers and alphabets from data
+    // Process numbers and alphabets from the data
     let numbers = data.filter(d => !isNaN(d));
     let alphabets = data.filter(d => isNaN(d));
     let highestLowercase = alphabets.filter(d => d === d.toLowerCase())
                                     .sort((a, b) => b.localeCompare(a))[0] || null;
 
-    // Handle file if provided
+    // Handle file if provided (optional)
     let fileValid = false, fileMimeType = '', fileSizeKB = 0;
     if (file_b64) {
         try {
@@ -52,12 +51,12 @@ app.post('/bfhl', (req, res) => {
     });
 });
 
-// GET Route
+// Simple GET route
 app.get('/bfhl', (req, res) => {
     res.status(200).json({ operation_code: 1 });
 });
 
-// Serve HTML page from /public directory
+// Serve the HTML page from /public directory
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
