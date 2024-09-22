@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP21110010654</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+        }
+
+        textarea, button {
+            width: 95%;
+            margin-top: 10px;
+        }
+
+        textarea {
+            padding: 14px;
+            font-size: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            height: 100px;
+        }
+
+        button {
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 18px;
+        }
+
+        button:hover {
+            background-color: #155ab6;
+        }
+
+        /* Checkboxes inline styling */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .checkbox-group label {
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .response-container {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .response-container p {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">        
+        <h2>Input</h2>
+        <textarea id="jsonInput" placeholder="Enter JSON input here">{ "data": ["M","1","334","4","B"] }</textarea>
+        <button onclick="submitData()">Submit</button>
+
+        <h2>Multi Filter</h2>
+        <div class="checkbox-group">
+            <label><input type="checkbox" value="Alphabets"> Alphabets</label>
+            <label><input type="checkbox" value="Numbers"> Numbers</label>
+            <label><input type="checkbox" value="Highest Lowercase Alphabet"> Highest Lowercase Alphabet</label>
+        </div>
+
+        <div id="responseData" class="response-container">
+            <h3>Filtered Response</h3>
+            <div id="filteredResponse"></div>
+        </div>
+    </div>
+
+    <script>
+        async function submitData() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const selectedOptions = Array.from(document.querySelectorAll('.checkbox-group input:checked'))
+                                        .map(option => option.value);
+
+            try {
+                const response = await fetch('/bfhl', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonInput
+                });
+
+                const data = await response.json();
+                displayResponse(data, selectedOptions);
+            } catch (err) {
+                document.getElementById('filteredResponse').innerText = 'Error: Invalid JSON or server issue.';
+            }
+        }
+
+        function displayResponse(data, options) {
+            let output = '';
+
+            if (options.includes('Alphabets')) {
+                output += <p><strong>Alphabets:</strong> ${data.alphabets.join(', ')}</p>;
+            }
+            if (options.includes('Numbers')) {
+                output += <p><strong>Numbers:</strong> ${data.numbers.join(', ')}</p>;
+            }
+            if (options.includes('Highest Lowercase Alphabet')) {
+                output += <p><strong>Highest Lowercase Alphabet:</strong> ${data.highest_lowercase_alphabet.join(', ')}</p>;
+            }
+
+            document.getElementById('filteredResponse').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
