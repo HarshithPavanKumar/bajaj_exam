@@ -54,7 +54,6 @@
             background-color: #155ab6;
         }
 
-        /* Checkboxes inline styling */
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -124,13 +123,13 @@
             let output = '';
 
             if (options.includes('Alphabets')) {
-                output += <p><strong>Alphabets:</strong> ${data.alphabets.join(', ')}</p>;
+                output += `<p><strong>Alphabets:</strong> ${data.alphabets.join(', ')}</p>`;
             }
             if (options.includes('Numbers')) {
-                output += <p><strong>Numbers:</strong> ${data.numbers.join(', ')}</p>;
+                output += `<p><strong>Numbers:</strong> ${data.numbers.join(', ')}</p>`;
             }
             if (options.includes('Highest Lowercase Alphabet')) {
-                output += <p><strong>Highest Lowercase Alphabet:</strong> ${data.highest_lowercase_alphabet.join(', ')}</p>;
+                output += `<p><strong>Highest Lowercase Alphabet:</strong> ${data.highest_lowercase_alphabet.join(', ')}</p>`;
             }
 
             document.getElementById('filteredResponse').innerHTML = output;
